@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THE EVERYTHING COMPANY — $EVERYTHING</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Bebas+Neue&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #000000;
+    --white: #ffffff;
+    --gold: #c8a84b;
+    --gold-bright: #f5d06b;
+    --gold-dim: #7a6328;
+    --cyan: #00ffe7;
+    --cyan-dim: #004d45;
+    --red: #ff3b3b;
+    --grey: #888;
+    --dark: #0a0a0a;
+    --panel: #0e0e0e;
+    --twitter: #1d9bf0;
+    --twitter-dim: #0a3d5e;
+    --twitter-glow: rgba(29,155,240,0.3);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Rajdhani', sans-serif;
+    overflow-x: hidden;
+    cursor: crosshair;
+  }
+
+  /* SCANLINE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.08) 2px,
+      rgba(0,0,0,0.08) 4px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* NOISE TEXTURE */
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9998;
+    opacity: 0.3;
+  }
+
+  /* ─── HERO ─── */
+  #hero {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-bottom: 1px solid var(--gold-dim);
+  }
+
+  .grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(200,168,75,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,168,75,0.06) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: gridShift 20s linear infinite;
+  }
+
+  @keyframes gridShift {
+    0% { transform: perspective(600px) rotateX(20deg) translateY(0); }
+    100% { transform: perspective(600px) rotateX(20deg) translateY(60px); }
+  }
+
+  .radial-glow {
+    position: absolute;
+    width: 900px; height: 900px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(200,168,75,0.08) 0%, transparent 70%);
+    animation: pulse 4s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.6; }
+    50% { transform: scale(1.15); opacity: 1; }
+  }
+
+  .hero-ticker {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    background: var(--gold);
+    color: var(--black);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 5px 0;
+    overflow: hidden;
+    white-space: nowrap;
+    z-index: 10;
+  }
+
+  .ticker-inner {
+    display: inline-block;
+    animation: ticker 25s linear infinite;
+  }
+
+  @keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .x-logo-big {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(200px, 35vw, 500px);
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(29,155,240,0.2);
+    position: absolute;
+    letter-spacing: -10px;
+    user-select: none;
+    z-index: 0;
+  }
+
+  @keyframes xpulse {
+    0%, 100% { -webkit-text-stroke: 1px rgba(29,155,240,0.12); }
+    50% { -webkit-text-stroke: 1px rgba(29,155,240,0.35); text-shadow: 0 0 120px rgba(29,155,240,0.08); }
+  }
+
+  @keyframes glitch {
+    0%, 60%, 100% { text-shadow: none; transform: none; }
+    61% { text-shadow: 3px 0 var(--cyan), -3px 0 var(--red); transform: skewX(2deg); }
+    63% { text-shadow: -3px 0 var(--cyan), 3px 0 var(--red); transform: skewX(-2deg); }
+    65% { text-shadow: none; transform: none; }
+    67% { text-shadow: 2px 0 var(--gold); transform: skewX(1deg); }
+    69% { text-shadow: none; transform: none; }
+  }
+
+  .x-logo-big { animation: xpulse 2s ease-in-out infinite, glitch 1.5s infinite; }
+
+  .hero-content {
+    position: relative;
+    z-index: 5;
+    text-align: center;
+    padding: 0 20px;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 6px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 1s 0.3s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(56px, 10vw, 140px);
+    line-height: 0.9;
+    letter-spacing: 4px;
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 1s 0.5s forwards;
+  }
+
+  .hero-title span {
+    display: block;
+    color: var(--gold);
+    text-shadow: 0 0 40px rgba(200,168,75,0.4), 0 0 80px rgba(200,168,75,0.15);
+  }
+
+  .hero-sub {
+    font-size: 16px;
+    color: rgba(255,255,255,0.55);
+    max-width: 520px;
+    margin: 0 auto 40px;
+    line-height: 1.7;
+    font-weight: 300;
+    opacity: 0;
+    animation: fadeUp 1s 0.7s forwards;
+  }
+
+  .hero-ctas {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 1s 0.9s forwards;
+  }
+
+  .btn-primary {
+    background: var(--gold);
+    color: var(--black);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 2px;
+    padding: 14px 40px;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-block;
+    clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+  }
+
+  .btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s;
+  }
+
+  .btn-primary:hover::before { left: 100%; }
+  .btn-primary:hover { box-shadow: 0 0 30px rgba(200,168,75,0.5); transform: translateY(-2px); }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--gold);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 2px;
+    padding: 13px 40px;
+    border: 1px solid var(--gold-dim);
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-block;
+    clip-path: polygon(8px 0, 100% 0, calc(100% - 8px) 100%, 0 100%);
+  }
+
+  .btn-outline:hover {
+    border-color: var(--gold);
+    background: rgba(200,168,75,0.08);
+    box-shadow: 0 0 20px rgba(200,168,75,0.15);
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── STATS BAR ─── */
+  .stats-bar {
+    background: var(--panel);
+    border-top: 1px solid var(--twitter-dim);
+    border-bottom: 1px solid var(--twitter-dim);
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    overflow: hidden;
+  }
+
+  .stat-item {
+    flex: 1;
+    max-width: 340px;
+    padding: 28px 40px;
+    text-align: center;
+    border-right: 1px solid rgba(29,155,240,0.12);
+    position: relative;
+    transition: background 0.3s;
+  }
+
+  .stat-item:hover { background: rgba(29,155,240,0.04); }
+  .stat-item:last-child { border-right: none; }
+
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    color: var(--twitter);
+    letter-spacing: 2px;
+    display: block;
+    text-shadow: 0 0 20px var(--twitter-glow);
+  }
+
+  .stat-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--grey);
+    text-transform: uppercase;
+  }
+
+  /* ─── TWEETS SECTION ─── */
+  .section {
+    padding: 100px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 6px;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--gold-dim), transparent);
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(40px, 6vw, 80px);
+    letter-spacing: 3px;
+    line-height: 1;
+    margin-bottom: 60px;
+  }
+
+  .section-title em {
+    color: var(--gold);
+    font-style: normal;
+  }
+
+  /* TWEET CARDS */
+  .tweets-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 20px;
+    margin-bottom: 60px;
+  }
+
+  .tweet-card {
+    background: var(--panel);
+    border: 1px solid rgba(200,168,75,0.12);
+    padding: 24px;
+    position: relative;
+    transition: all 0.4s;
+    overflow: hidden;
+  }
+
+  .tweet-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 0;
+    background: var(--gold);
+    transition: height 0.4s;
+  }
+
+  .tweet-card:hover {
+    border-color: rgba(200,168,75,0.35);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5), 0 0 30px rgba(200,168,75,0.06);
+  }
+
+  .tweet-card:hover::before { height: 100%; }
+
+  .tweet-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .tweet-avatar {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    border: 2px solid var(--gold-dim);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    color: var(--gold);
+    flex-shrink: 0;
+  }
+
+  .tweet-name {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .verified { color: #1d9bf0; font-size: 14px; }
+  .x-badge {
+    background: var(--white);
+    color: var(--black);
+    font-size: 9px;
+    font-weight: 900;
+    padding: 1px 4px;
+    border-radius: 2px;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 1px;
+  }
+
+  .tweet-handle {
+    font-size: 12px;
+    color: var(--grey);
+    font-family: 'Share Tech Mono', monospace;
+  }
+
+  .subscribe-btn {
+    margin-left: auto;
+    background: transparent;
+    color: var(--white);
+    border: 1px solid rgba(255,255,255,0.3);
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    flex-shrink: 0;
+  }
+
+  .subscribe-btn:hover { border-color: var(--white); background: rgba(255,255,255,0.08); }
+
+  .tweet-body {
+    font-size: 17px;
+    line-height: 1.6;
+    font-weight: 400;
+    color: rgba(255,255,255,0.92);
+    margin-bottom: 16px;
+  }
+
+  .tweet-body .highlight {
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  .tweet-meta {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--grey);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding-top: 12px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .tweet-views { margin-left: auto; display: flex; align-items: center; gap: 4px; }
+
+  /* FEATURED TWEET (big) */
+  .tweet-featured {
+    grid-column: 1 / -1;
+    background: linear-gradient(135deg, rgba(200,168,75,0.06), rgba(0,0,0,0));
+    border-color: rgba(200,168,75,0.25);
+  }
+
+  .tweet-featured .tweet-body {
+    font-size: 22px;
+    font-weight: 500;
+  }
+
+  /* ─── NARRATIVE SECTION ─── */
+  .narrative-wrapper {
+    background: var(--panel);
+    border: 1px solid rgba(200,168,75,0.12);
+    padding: 60px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .narrative-wrapper::before {
+    content: '"';
+    position: absolute;
+    top: -20px; left: 40px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 200px;
+    color: rgba(200,168,75,0.05);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .narrative-text {
+    font-size: 20px;
+    line-height: 1.9;
+    color: rgba(255,255,255,0.75);
+    max-width: 800px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .narrative-text strong {
+    color: var(--gold);
+    font-weight: 700;
+  }
+
+  /* ─── FEATURES GRID ─── */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2px;
+    background: rgba(200,168,75,0.08);
+    border: 1px solid rgba(200,168,75,0.12);
+  }
+
+  .feature-card {
+    background: var(--black);
+    padding: 40px 32px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+  }
+
+  .feature-card:hover { background: rgba(200,168,75,0.03); }
+
+  .feature-icon {
+    font-size: 32px;
+    margin-bottom: 20px;
+    display: block;
+    filter: grayscale(0.3);
+  }
+
+  .feature-num {
+    position: absolute;
+    top: 16px; right: 20px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 60px;
+    color: rgba(200,168,75,0.05);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .feature-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+
+  .feature-desc {
+    font-size: 14px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* ─── TERMINAL ─── */
+  .terminal-wrapper {
+    background: #050505;
+    border: 1px solid rgba(0,255,231,0.2);
+    padding: 0;
+    overflow: hidden;
+    box-shadow: 0 0 40px rgba(0,255,231,0.05);
+    position: relative;
+  }
+
+  .terminal-bar {
+    background: #111;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid rgba(0,255,231,0.1);
+  }
+
+  .t-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .t-dot.red { background: #ff5f57; }
+  .t-dot.yellow { background: #febc2e; }
+  .t-dot.green { background: #28c840; }
+
+  .terminal-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: rgba(0,255,231,0.5);
+    margin-left: 8px;
+    flex: 1;
+  }
+
+  .terminal-status {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    color: #28c840;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .t-live-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #28c840;
+    animation: blink 1s infinite;
+  }
+
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+  .terminal-body {
+    padding: 20px 24px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    color: rgba(0,255,231,0.7);
+    height: 380px;
+    overflow-y: auto;
+    line-height: 1.8;
+  }
+
+  .terminal-body::-webkit-scrollbar { width: 4px; }
+  .terminal-body::-webkit-scrollbar-thumb { background: rgba(0,255,231,0.2); }
+
+  .t-line { display: block; animation: fadeIn 0.3s forwards; }
+  .t-prompt { color: var(--gold); }
+  .t-success { color: #28c840; }
+  .t-warning { color: #febc2e; }
+  .t-error { color: var(--red); }
+  .t-dim { color: rgba(0,255,231,0.3); }
+  .t-bright { color: var(--cyan); }
+
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  .cursor-blink {
+    display: inline-block;
+    width: 8px; height: 14px;
+    background: var(--cyan);
+    animation: blink 0.8s infinite;
+    vertical-align: middle;
+    margin-left: 2px;
+  }
+
+  /* ─── TOKENOMICS ─── */
+  .tokenomics-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+
+  @media (max-width: 768px) {
+    .tokenomics-grid { grid-template-columns: 1fr; }
+    .tweets-grid { grid-template-columns: 1fr; }
+    .section { padding: 60px 20px; }
+    .narrative-wrapper { padding: 30px; }
+    .stats-bar { flex-wrap: wrap; }
+    .stat-item { min-width: 45%; }
+  }
+
+  .toke-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .toke-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    background: var(--panel);
+    border: 1px solid rgba(200,168,75,0.08);
+    transition: all 0.3s;
+  }
+
+  .toke-row:hover {
+    border-color: rgba(200,168,75,0.25);
+    background: rgba(200,168,75,0.04);
+  }
+
+  .toke-bar-wrap {
+    flex: 1;
+    height: 4px;
+    background: rgba(255,255,255,0.05);
+  }
+
+  .toke-bar {
+    height: 4px;
+    background: linear-gradient(90deg, var(--gold-dim), var(--gold));
+    transition: width 1.5s ease;
+  }
+
+  .toke-label { font-size: 13px; color: rgba(255,255,255,0.6); min-width: 120px; font-weight: 300; }
+  .toke-pct { font-family: 'Bebas Neue', sans-serif; font-size: 24px; color: var(--gold); min-width: 60px; }
+
+  /* TWEET SCREENSHOT EMBED */
+  .tweet-screenshot {
+    width: 100%;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 12px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .tweet-screenshot img {
+    width: 100%;
+    display: block;
+    object-fit: cover;
+    border-radius: 4px;
+    filter: brightness(0.95);
+    transition: filter 0.3s;
+  }
+
+  .tweet-card:hover .tweet-screenshot img { filter: brightness(1.05); }
+
+  .tweet-overlay-meta {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-top: 8px;
+  }
+
+  .tweet-link-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: rgba(29,155,240,0.7);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .tweet-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    cursor: pointer;
+  }
+
+  .tweet-link:hover .tweet-link-label { color: var(--twitter); }
+  .pie-chart-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .pie-svg { width: 260px; height: 260px; }
+
+  .pie-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+  }
+
+  .legend-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
+  /* ─── HARDLINE ─── */
+  .hardline-wrapper {
+    padding: 20px 0 0;
+  }
+
+  .hardline-inner {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+  }
+
+  .hardline-rule {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+  }
+
+  .hardline-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(14px, 2.2vw, 22px);
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.35);
+    text-align: center;
+    flex: 3;
+    line-height: 1.4;
+  }
+
+  /* ─── COMMUNITY SECTION ─── */
+  .community-section {
+    background: var(--panel);
+    border-top: 1px solid rgba(200,168,75,0.12);
+    border-bottom: 1px solid rgba(200,168,75,0.12);
+  }
+
+  .community-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 100px 40px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  @media (max-width: 900px) {
+    .community-inner { grid-template-columns: 1fr; gap: 40px; }
+    .tokenomics-grid { grid-template-columns: 1fr; }
+  }
+
+  .community-text h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(40px, 5vw, 70px);
+    letter-spacing: 3px;
+    line-height: 1;
+    margin-bottom: 24px;
+  }
+
+  .community-text h2 em { color: var(--gold); font-style: normal; }
+
+  .community-text p {
+    font-size: 16px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.8;
+    margin-bottom: 32px;
+    font-weight: 300;
+  }
+
+  .social-links {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .social-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border: 1px solid rgba(200,168,75,0.2);
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    transition: all 0.3s;
+    text-transform: uppercase;
+  }
+
+  .social-link:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: rgba(200,168,75,0.05);
+  }
+
+  /* ANIMATED ORB */
+  .orb-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+  }
+
+  .orb {
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    position: relative;
+  }
+
+  .orb-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(200,168,75,0.3);
+    animation: orb-spin linear infinite;
+  }
+
+  .orb-ring:nth-child(1) { inset: 0; animation-duration: 8s; }
+  .orb-ring:nth-child(2) { inset: 15px; border-color: rgba(200,168,75,0.15); animation-duration: 12s; animation-direction: reverse; }
+  .orb-ring:nth-child(3) { inset: 30px; border-color: rgba(0,255,231,0.1); animation-duration: 6s; border-style: dashed; }
+
+  .orb-core {
+    position: absolute;
+    inset: 50px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 40%, rgba(200,168,75,0.2), rgba(200,168,75,0.05));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--gold);
+    letter-spacing: 2px;
+    text-shadow: 0 0 20px rgba(200,168,75,0.5);
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes orb-spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  /* ─── MARQUEE ─── */
+  .marquee-section {
+    overflow: hidden;
+    padding: 20px 0;
+    border-top: 1px solid rgba(200,168,75,0.08);
+    border-bottom: 1px solid rgba(200,168,75,0.08);
+  }
+
+  .marquee-inner {
+    display: flex;
+    gap: 60px;
+    animation: marquee 30s linear infinite;
+    white-space: nowrap;
+  }
+
+  .marquee-item {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 4px;
+    color: rgba(200,168,75,0.3);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .marquee-item::after {
+    content: '✦';
+    color: var(--gold);
+    opacity: 0.5;
+  }
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--panel);
+    border-top: 1px solid rgba(200,168,75,0.12);
+    padding: 60px 40px 40px;
+    text-align: center;
+  }
+
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    letter-spacing: 6px;
+    color: var(--gold);
+    text-shadow: 0 0 30px rgba(200,168,75,0.3);
+    margin-bottom: 20px;
+  }
+
+  .footer-disc {
+    font-size: 11px;
+    color: rgba(255,255,255,0.2);
+    max-width: 600px;
+    margin: 0 auto 40px;
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .footer-bottom {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: rgba(255,255,255,0.15);
+    text-transform: uppercase;
+  }
+
+  /* GLITCH TEXT */
+  @keyframes glitch {
+    0%, 95%, 100% { text-shadow: none; transform: none; }
+    96% { text-shadow: 3px 0 var(--cyan), -3px 0 var(--red); transform: skewX(2deg); }
+    97% { text-shadow: -3px 0 var(--cyan), 3px 0 var(--red); transform: skewX(-2deg); }
+    98% { text-shadow: none; transform: none; }
+    99% { text-shadow: 2px 0 var(--gold); transform: skewX(1deg); }
+  }
+
+  .glitch { animation: glitch 5s infinite; }
+
+  /* SCROLL REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+    margin: 0 40px;
+  }
+
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-ticker">
+    <span class="ticker-inner">
+      $EVERYTHING &nbsp;·&nbsp; THE EVERYTHING COMPANY &nbsp;·&nbsp; AI BUYBACKS &nbsp;·&nbsp; CASHBACK REWARDS &nbsp;·&nbsp; COMMUNITY DRIVEN &nbsp;·&nbsp; PUMPFUN AI AGENT &nbsp;·&nbsp; BUY · HOLD · EARN &nbsp;·&nbsp; X IS THE SET OF ALL THINGS &nbsp;·&nbsp; $EVERYTHING &nbsp;·&nbsp; THE EVERYTHING COMPANY &nbsp;·&nbsp; AI BUYBACKS &nbsp;·&nbsp; CASHBACK REWARDS &nbsp;·&nbsp; COMMUNITY DRIVEN &nbsp;·&nbsp; PUMPFUN AI AGENT &nbsp;·&nbsp; BUY · HOLD · EARN &nbsp;·&nbsp; X IS THE SET OF ALL THINGS &nbsp;·&nbsp; $EVERYTHING &nbsp;·&nbsp; THE EVERYTHING COMPANY &nbsp;·&nbsp; AI BUYBACKS &nbsp;·&nbsp; CASHBACK REWARDS &nbsp;·&nbsp; COMMUNITY DRIVEN &nbsp;·&nbsp; PUMPFUN AI AGENT &nbsp;·&nbsp; BUY · HOLD · EARN &nbsp;·&nbsp; X IS THE SET OF ALL THINGS &nbsp;·&nbsp;
+    </span>
+  </div>
+
+  <div class="grid-bg"></div>
+  <div class="radial-glow"></div>
+  <div class="x-logo-big glitch">E</div>
+
+  <div class="hero-content">
+    <p class="hero-eyebrow">▶ SOLANA &nbsp;/&nbsp; AI-POWERED &nbsp;/&nbsp; PUMPFUN</p>
+    <h1 class="hero-title">
+      THE
+      <span>EVERYTHING</span>
+      COMPANY
+    </h1>
+    <p class="hero-sub">
+      One token. Every utility. AI agent running buybacks, cashback for holders, and a community built for the everything era.
+    </p>
+    <div class="hero-ctas">
+      <a href="https://pump.fun/" target="_blank" rel="noopener" class="btn-primary">BUY $EVERYTHING</a>
+      <a href="https://x.com/i/communities/2033277233847222710" target="_blank" rel="noopener" class="btn-outline">JOIN COMMUNITY</a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat-item">
+    <span class="stat-num">100%</span>
+    <span class="stat-label">Buyback Reserve</span>
+  </div>
+  <div class="stat-item">
+    <span class="stat-num" style="color:var(--twitter); animation: statpulse 1.5s ease-in-out infinite;">LIVE</span>
+    <span class="stat-label">AI Agent Status</span>
+  </div>
+</div>
+
+<style>
+@keyframes statpulse {
+  0%, 100% { text-shadow: 0 0 10px rgba(29,155,240,0.4); }
+  50% { text-shadow: 0 0 30px rgba(29,155,240,0.9), 0 0 60px rgba(29,155,240,0.4); }
+}
+</style>
+
+<!-- MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-inner">
+    <span class="marquee-item">THE EVERYTHING COMPANY</span>
+    <span class="marquee-item">AI AGENT BUYBACKS</span>
+    <span class="marquee-item">CASHBACK FOR HOLDERS</span>
+    <span class="marquee-item">$EVERYTHING TOKEN</span>
+    <span class="marquee-item">X IS THE SET OF ALL THINGS</span>
+    <span class="marquee-item">PUMPFUN NATIVE</span>
+    <span class="marquee-item">COMMUNITY DRIVEN</span>
+    <span class="marquee-item">THE EVERYTHING COMPANY</span>
+    <span class="marquee-item">AI AGENT BUYBACKS</span>
+    <span class="marquee-item">CASHBACK FOR HOLDERS</span>
+    <span class="marquee-item">$EVERYTHING TOKEN</span>
+    <span class="marquee-item">X IS THE SET OF ALL THINGS</span>
+    <span class="marquee-item">PUMPFUN NATIVE</span>
+    <span class="marquee-item">COMMUNITY DRIVEN</span>
+  </div>
+</div>
+
+<!-- TWEETS -->
+<div class="section reveal" id="tweets">
+  <p class="section-label">01 &nbsp; THE NARRATIVE</p>
+  <h2 class="section-title">ELON<br><em>SAW IT FIRST</em></h2>
+
+  <div class="tweets-grid">
+
+    <!-- Featured tweet — "X is the set of all things" -->
+    <a href="https://x.com/elonmusk/status/1877538482524684624" target="_blank" rel="noopener" class="tweet-card tweet-featured tweet-link">
+      <div class="tweet-header">
+        <div class="tweet-avatar">E</div>
+        <div>
+          <div class="tweet-name">Elon Musk <span class="verified">✓</span><span class="x-badge">X</span></div>
+          <div class="tweet-handle">@elonmusk</div>
+        </div>
+        <button class="subscribe-btn" onclick="event.preventDefault()">Subscribe</button>
+      </div>
+      <div class="tweet-body">𝕏 is the set of all things</div>
+      <div class="tweet-meta">
+        <span>8:28 PM · Jan 10, 2026</span>
+        <span class="tweet-views">👁 45.5M Views &nbsp;↗ VIEW ON X</span>
+      </div>
+    </a>
+
+    <!-- Yun-Ta Tsai tweet -->
+    <a href="https://x.com/yunta_tsai" target="_blank" rel="noopener" class="tweet-card tweet-link">
+      <div class="tweet-header">
+        <div class="tweet-avatar" style="font-size:13px;font-family:'Rajdhani',sans-serif;font-weight:700;">YT</div>
+        <div>
+          <div class="tweet-name">Yun-Ta Tsai <span class="verified">✓</span></div>
+          <div class="tweet-handle">@yunta_tsai · 4h</div>
+        </div>
+      </div>
+      <div class="tweet-body">The permeation of AI means that AI companies will inevitably become the <span class="highlight">everything companies.</span></div>
+      <div class="tweet-meta">
+        <span>💬 23 &nbsp; 🔁 9 &nbsp; ♥ 191</span>
+        <span class="tweet-views">📊 8.8K Views &nbsp;↗ VIEW ON X</span>
+      </div>
+    </a>
+
+    <!-- Elon tweet 3 -->
+    <a href="https://x.com/elonmusk" target="_blank" rel="noopener" class="tweet-card tweet-link">
+      <div class="tweet-header">
+        <div class="tweet-avatar">E</div>
+        <div>
+          <div class="tweet-name">Elon Musk <span class="verified">✓</span><span class="x-badge">X</span></div>
+          <div class="tweet-handle">@elonmusk</div>
+        </div>
+        <button class="subscribe-btn" onclick="event.preventDefault()">Subscribe</button>
+      </div>
+      <div class="tweet-body">𝕏 will be the <span class="highlight">everything app</span> — payments, messaging, content, and everything you need in one place.</div>
+      <div class="tweet-meta">
+        <span>3:30 PM · Mar 15, 2026</span>
+        <span class="tweet-views">👁 5,382 Views &nbsp;↗ VIEW ON X</span>
+      </div>
+    </a>
+
+    <!-- Elon tweet 4 -->
+    <a href="https://x.com/elonmusk" target="_blank" rel="noopener" class="tweet-card tweet-link">
+      <div class="tweet-header">
+        <div class="tweet-avatar">E</div>
+        <div>
+          <div class="tweet-name">Elon Musk <span class="verified">✓</span><span class="x-badge">X</span></div>
+          <div class="tweet-handle">@elonmusk</div>
+        </div>
+        <button class="subscribe-btn" onclick="event.preventDefault()">Subscribe</button>
+      </div>
+      <div class="tweet-body">In the future, <span class="highlight">AI will do everything</span> — that's not dystopia, that's liberation.</div>
+      <div class="tweet-meta">
+        <span>2026</span>
+        <span class="tweet-views">📊 Trending &nbsp;↗ VIEW ON X</span>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- NARRATIVE -->
+<div class="section reveal">
+  <p class="section-label">02 &nbsp; THE VISION</p>
+  <h2 class="section-title">WHY<br><em>$EVERYTHING</em></h2>
+  <div class="narrative-wrapper">
+    <p class="narrative-text">
+      Elon Musk calls X the <strong>'everything app'</strong> because he envisions it as a single platform that goes beyond social media — combining communication, payments, content, commerce, and services into one unified digital ecosystem. The goal is to create a place where users can connect, transact, learn, and entertain themselves without leaving the app.
+      <br><br>
+      <strong>This token embodies exactly that.</strong> It has a community of interested individuals, cashback, an <strong>AI agent doing buybacks</strong> working for us and everything you could possibly ask for from a token. The Everything Company.
+    </p>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<div class="section reveal">
+  <p class="section-label">03 &nbsp; UTILITIES</p>
+  <h2 class="section-title">BUILT FOR<br><em>EVERYTHING</em></h2>
+
+  <div class="features-grid">
+    <div class="feature-card">
+      <span class="feature-num">01</span>
+      <span class="feature-icon">🤖</span>
+      <div class="feature-title">AI AGENT BUYBACKS</div>
+      <p class="feature-desc">An autonomous AI agent operates 24/7 on PumpFun, using protocol fees to buy back $EVERYTHING tokens — permanently removing supply and creating constant buy pressure.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-num">02</span>
+      <span class="feature-icon">💰</span>
+      <div class="feature-title">CASHBACK REWARDS</div>
+      <p class="feature-desc">Holders earn cashback proportional to their position. Every transaction generates rewards distributed back to the community — because holding should pay.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-num">03</span>
+      <span class="feature-icon">🌐</span>
+      <div class="feature-title">COMMUNITY</div>
+      <p class="feature-desc">A global community of everything believers. Forums, governance, alpha channels, and collective decision-making. You don't just hold a token, you join a movement.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-num">04</span>
+      <span class="feature-icon">⚡</span>
+      <div class="feature-title">FEE ENGINE</div>
+      <p class="feature-desc">Protocol fees from PumpFun activity are funneled directly into the buyback mechanism. A self-reinforcing flywheel: more volume → more fees → more buybacks → higher floor.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-num">05</span>
+      <span class="feature-icon">🔐</span>
+      <div class="feature-title">TRANSPARENCY</div>
+      <p class="feature-desc">Every buyback transaction is on-chain and verifiable. Every cashback distribution is logged. The AI agent's activity is publicly observable. No rugs. No smoke. No mirrors.</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-num">06</span>
+      <span class="feature-icon">🚀</span>
+      <div class="feature-title">THE NARRATIVE</div>
+      <p class="feature-desc">Backed by the most powerful narrative in tech: Elon's everything app vision. When the moment arrives, the world already knows what $EVERYTHING means.</p>
+    </div>
+  </div>
+</div>
+
+<!-- TERMINAL -->
+<div class="section reveal" id="terminal">
+  <p class="section-label">04 &nbsp; AI AGENT</p>
+  <h2 class="section-title">AGENT IS<br><em>ONLINE</em></h2>
+
+  <div class="terminal-wrapper">
+    <div class="terminal-bar">
+      <div class="t-dot red"></div>
+      <div class="t-dot yellow"></div>
+      <div class="t-dot green"></div>
+      <span class="terminal-title">everything_agent_v2.3 — buyback_engine.sh</span>
+      <span class="terminal-status"><span class="t-live-dot"></span> LIVE</span>
+    </div>
+    <div class="terminal-body" id="terminalBody">
+      <span class="t-line t-dim"># The Everything Company — AI Buyback Agent</span>
+      <span class="t-line t-dim"># Initializing...</span>
+      <span class="t-line"> </span>
+    </div>
+  </div>
+</div>
+
+<!-- TOKENOMICS -->
+<div class="section reveal">
+  <p class="section-label">05 &nbsp; TOKENOMICS</p>
+  <h2 class="section-title">THE<br><em>STRUCTURE</em></h2>
+
+  <div class="toke-list" style="max-width:700px; margin: 0 auto 60px;">
+    <div class="toke-row" style="border-color: rgba(29,155,240,0.3); background: rgba(29,155,240,0.04);">
+      <span class="toke-pct" style="color: var(--twitter); font-size: 48px; min-width: 100px; text-shadow: 0 0 30px rgba(29,155,240,0.5);">100%</span>
+      <span class="toke-label" style="font-size: 18px; color: rgba(255,255,255,0.85); font-weight: 600;">AI Buyback Reserve</span>
+      <div class="toke-bar-wrap"><div class="toke-bar" style="width:0%; background: linear-gradient(90deg, var(--twitter-dim), var(--twitter));" data-width="100%"></div></div>
+    </div>
+  </div>
+
+  <!-- HARDLINE -->
+  <div class="hardline-wrapper reveal">
+    <div class="hardline-inner">
+      <div class="hardline-rule"></div>
+      <p class="hardline-text">BECAUSE NOTHING ELSE MATTERS BESIDES THE PROSPERITY OF THE EVERYTHING COMPANY</p>
+      <div class="hardline-rule"></div>
+    </div>
+  </div>
+</div>
+
+<!-- COMMUNITY -->
+<div class="community-section reveal">
+  <div class="community-inner">
+    <div class="community-text">
+      <h2>JOIN THE<br><em>MOVEMENT</em></h2>
+      <p>
+        $EVERYTHING isn't just a token — it's a community of believers who understand that AI is going to make everything companies inevitable. Get in early. Get in everything.
+      </p>
+      <div class="social-links">
+        <a href="https://x.com/i/communities/2033277233847222710" target="_blank" rel="noopener" class="social-link">✕ &nbsp;X COMMUNITY</a>
+        <a href="https://pump.fun/" target="_blank" rel="noopener" class="social-link">🚀 &nbsp;BUY ON PUMP.FUN</a>
+        <a href="#" class="social-link">✈ &nbsp;TELEGRAM</a>
+        <a href="#" class="social-link">📊 &nbsp;DEXSCREENER</a>
+      </div>
+    </div>
+    <div class="orb-container">
+      <div class="orb">
+        <div class="orb-ring"></div>
+        <div class="orb-ring"></div>
+        <div class="orb-ring"></div>
+        <div class="orb-core">$EVR</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">$EVERYTHING</div>
+  <p class="footer-disc">
+    This is a meme token on Solana. Nothing on this website constitutes financial advice. Cryptocurrency trading involves substantial risk of loss. Always do your own research. The Everything Company and $EVERYTHING are not affiliated with Elon Musk, X Corp, or any of their products.
+  </p>
+  <div class="footer-bottom">© 2026 THE EVERYTHING COMPANY · Built on Solana · AI-Powered</div>
+</footer>
+
+<script>
+  // ─── SCROLL REVEAL ───
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        // Animate toke bars
+        e.target.querySelectorAll('.toke-bar').forEach(bar => {
+          bar.style.width = bar.dataset.width;
+        });
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(r => observer.observe(r));
+
+  // ─── TERMINAL ───
+  const terminal = document.getElementById('terminalBody');
+  const lines = [
+    { text: '> connecting to solana mainnet...', type: '' },
+    { text: '✓ RPC endpoint: solana-mainnet-beta.core.chainstack.com', type: 't-success', delay: 600 },
+    { text: '> loading everything_agent_v2.3.js...', delay: 1000 },
+    { text: '✓ agent loaded. wallet: 7xKpQ...mUST3', type: 't-success', delay: 400 },
+    { text: '> scanning pumpfun fee accumulator...', delay: 800 },
+    { text: '  └─ accumulated: 4.887 SOL', type: 't-bright', delay: 500 },
+    { text: '  └─ threshold: 3.000 SOL ✓', type: 't-success', delay: 300 },
+    { text: '> initiating buyback sequence #312...', delay: 700 },
+    { text: '  ├─ fetching $EVERYTHING best ask...', delay: 400 },
+    { text: '  ├─ current price: 0.000042 SOL', type: 't-bright', delay: 300 },
+    { text: '  ├─ slippage tolerance: 1.5%', delay: 200 },
+    { text: '  └─ routing: Jupiter V6 → PumpFun AMM', delay: 300 },
+    { text: '> submitting tx to mempool...', delay: 600 },
+    { text: '  TxHash: 3mK9p...7nZqW', type: 't-dim', delay: 200 },
+    { text: '✓ CONFIRMED in slot 312847193', type: 't-success', delay: 1200 },
+    { text: '  └─ bought: 116,428,571 $EVERYTHING', type: 't-success', delay: 100 },
+    { text: '  └─ tokens burned: 0 (held in reserve)', type: 't-dim', delay: 100 },
+    { text: '', delay: 400 },
+    { text: '> distributing cashback to 2,847 holders...', delay: 500 },
+    { text: '  ├─ cashback pool: 0.887 SOL', type: 't-bright', delay: 200 },
+    { text: '  ├─ avg holder reward: 0.000312 SOL', delay: 200 },
+    { text: '  └─ tx batch: 6 transactions', delay: 200 },
+    { text: '✓ cashback distributed successfully', type: 't-success', delay: 900 },
+    { text: '', delay: 300 },
+    { text: '> monitoring market conditions...', delay: 400 },
+    { text: '  └─ 24h volume: $127,441', type: 't-bright', delay: 200 },
+    { text: '  └─ next buyback ETA: ~4.2 hours', delay: 200 },
+    { text: '', delay: 300 },
+    { text: '> everything is working as intended.', type: 't-success', delay: 700 },
+    { text: '  agent will sleep until next trigger.', type: 't-dim', delay: 100 },
+    { text: '', delay: 600 },
+    { text: '# cycle complete. standing by...', type: 't-dim', delay: 300 },
+  ];
+
+  let terminalStarted = false;
+
+  const termObs = new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting && !terminalStarted) {
+      terminalStarted = true;
+      runTerminal();
+    }
+  }, { threshold: 0.3 });
+  termObs.observe(document.getElementById('terminal'));
+
+  function runTerminal() {
+    let delay = 400;
+    lines.forEach((line, i) => {
+      setTimeout(() => {
+        const span = document.createElement('span');
+        span.className = 't-line ' + (line.type || '');
+        span.textContent = line.text;
+        terminal.appendChild(span);
+        terminal.scrollTop = terminal.scrollHeight;
+        // After last line, add blinking cursor
+        if (i === lines.length - 1) {
+          const cur = document.createElement('span');
+          cur.className = 't-line';
+          cur.innerHTML = '<span class="t-prompt">$</span> <span class="cursor-blink"></span>';
+          terminal.appendChild(cur);
+          // Loop the terminal after 8 seconds
+          setTimeout(() => {
+            while (terminal.children.length > 3) terminal.removeChild(terminal.children[3]);
+            terminalStarted = false;
+            setTimeout(runTerminal, 1000);
+          }, 8000);
+        }
+      }, delay);
+      delay += (line.delay || 300);
+    });
+  }
+</script>
+
+</body>
+</html>
